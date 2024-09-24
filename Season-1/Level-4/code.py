@@ -226,16 +226,16 @@ class DB_CRUD_ops(object):
 
             res = "[METHOD EXECUTED] exec_user_script\n"
             res += "[QUERY] " + query + "\n"
-            if ';' in query:
-                res += "[SCRIPT EXECUTION]"
-                cur.executescript(query)
-                db_con.commit()
-            else:
-                cur.execute(query)
+            # Split the query by semicolon to handle multiple queries
+            queries = query.split(';')
+            for single_query in filter(None, queries):
+                single_query = single_query.strip()
+                res += "[QUERY] " + single_query + "\n"
+                cur.execute(single_query)
                 db_con.commit()
                 query_outcome = cur.fetchall()
                 for result in query_outcome:
-                    res += "[RESULT] " + str(result)
+                    res += "[RESULT] " + str(result) + " "
             return res
 
         except sqlite3.Error as e:
