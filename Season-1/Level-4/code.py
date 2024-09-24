@@ -136,6 +136,7 @@ class DB_CRUD_ops(object):
             query = "SELECT price FROM stocks WHERE symbol = ?"
 
             cur.execute(query, (stock_symbol,))
+            db_con.commit()
             query_outcome = cur.fetchall()
             for result in query_outcome:
                 res += "[Result] " + str(result) + "\n"
