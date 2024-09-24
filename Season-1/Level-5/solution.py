@@ -20,17 +20,15 @@ class Random_generator:
 
 class SHA256_hasher:
 
-    # produces the password hash by combining password + salt because hashing
+    # produces the password hash using bcrypt
     def password_hash(self, password, salt):
-        password = binascii.hexlify(hashlib.sha256(password.encode()).digest())
-        password_hash = bcrypt.hashpw(password, salt)
+        password_hash = bcrypt.hashpw(password.encode(), salt)
         return password_hash.decode('ascii')
 
-    # verifies that the hashed password reverses to the plain text version on verification
+    # verifies that the hashed password matches the plain text version on verification
     def password_verification(self, password, password_hash):
-        password = binascii.hexlify(hashlib.sha256(password.encode()).digest())
         password_hash = password_hash.encode('ascii')
-        return bcrypt.checkpw(password, password_hash)
+        return bcrypt.checkpw(password.encode(), password_hash)
 
 # a collection of sensitive secrets necessary for the software to operate
 PRIVATE_KEY = os.environ.get('PRIVATE_KEY')
